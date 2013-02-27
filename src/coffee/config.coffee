@@ -11,6 +11,8 @@ require.config
     'backbone.subscribe': 'lib/backbone.subscribe'
     'backbone.layout': 'lib/backbone.layout'
     'socket.io': 'lib/socket.io'
+    'teoria': 'lib/teoria'
+    'audiolet': 'lib/audiolet'
     'handlebars': 'lib/handlebars'
     'hbs': 'lib/require.handlebars'
     'tmpl': '../hbs'
@@ -37,6 +39,12 @@ require.config
     'backbone.layout':
       deps: ['backbone']
       exports: 'Backbone.Layout'
+
+    'audiolet':
+      exports: 'Audiolet'
+
+    'teoria':
+      exports: 'teoria'
 
   hbs:
     disableI18n: true
