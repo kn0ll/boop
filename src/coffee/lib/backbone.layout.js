@@ -20,7 +20,7 @@ Backbone.Layout = Backbone.View.extend({
       view;
 
     for (var selector in views) {
-      view = views[selector]();
+      view = views[selector].apply(this);
       this.setView(selector, view, true);
     };
   },

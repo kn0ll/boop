@@ -21,14 +21,16 @@ define [
       '': 'index'
       'home': 'home'
       'logout': 'logout'
-      ':userId': 'profile'
+      'new': 'new'
+      ':user_id': 'profile'
 
-    index: ->
+    'index': ->
       return @navigate('home', trigger: true) if session.id
       do route_page('index')
 
-    home: route_page('home')
-    logout: route_page('logout')
-    profile: route_page('profile', ['user_id'])
+    'home': route_page('home')
+    'logout': route_page('logout')
+    'new': route_page('new')
+    'profile': route_page('profile', ['user_id'])
 
   new Router
