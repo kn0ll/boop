@@ -4,8 +4,9 @@ define [
   'underscore',
   'jquery.serializeForm',
   'core/session',
-  'resources/user'
-], (Layout, template, _, serializeForm, session, User) ->
+  'resources/user',
+  'core/router'
+], (Layout, template, _, serializeForm, session, User, router) ->
 
   class extends Layout
     template: template
@@ -30,7 +31,7 @@ define [
             password: attrs.password
           session.save session_attrs,
             success: ->
-              console.log 'u r logged in man'
+              router.navigate 'home', trigger: true
             error: (model, xhr) ->
               err = xhr.responseText or xhr
               alert "#{err}"

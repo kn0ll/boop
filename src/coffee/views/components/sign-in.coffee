@@ -2,8 +2,9 @@ define [
   'backbone.layout',
   'hbs!tmpl/components/sign-in',
   'core/session',
-  'jquery.serializeForm'
-], (Layout, template, session, serializeForm) ->
+  'jquery.serializeForm',
+  'core/router'
+], (Layout, template, session, serializeForm, router) ->
 
   class extends Layout
     template: template
@@ -22,7 +23,8 @@ define [
       # try creating session
       session.save serializeForm(@$el),
         success: ->
-          console.log 'u r logged in man'
+          router.navigate 'home', trigger: true
+
         error: (model, xhr) ->
           err = xhr.responseText or xhr
           alert "#{err}"

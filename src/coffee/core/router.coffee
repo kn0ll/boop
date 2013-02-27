@@ -4,7 +4,7 @@ define [
   'core/layout'
 ], (Backbone, session, layout) ->
 
-  load_page = (page_name) ->
+  route_page = (page_name) ->
     ->
       require [
         "views/pages/#{page_name}"
@@ -15,9 +15,14 @@ define [
 
     routes:
       '': 'index'
+      'home': 'home'
       'logout': 'logout'
 
-    index: load_page('index')
-    logout: load_page('logout')
+    index: ->
+      return @navigate('home', trigger: true) if session.id
+      do route_page('index')
+
+    home: route_page('home')
+    logout: route_page('logout')
 
   new Router
