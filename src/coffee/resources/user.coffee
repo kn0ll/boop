@@ -31,4 +31,4 @@ define [
     fetchBoops: (options = {}) ->
       options.data ?= {}
       options.data.user_id = @id
-      Boops::fetch.apply @boops, options
+      Boops::fetch.apply @boops, [options]

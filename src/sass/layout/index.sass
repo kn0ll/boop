@@ -1,8 +1,29 @@
 body
   
-  .header h3 a
-    display: block
-    background: url('/img/layout/logo.gif') no-repeat
-    width: 164px
-    height: 44px
-    text-indent: -9999px
+  .header
+    @extend .clearfix
+
+    h3
+      float: left
+      margin: 0 15px 0 0
+
+      a
+        display: block
+        background: url('/img/layout/logo.png') no-repeat
+        width: 23px
+        height: 40px
+        text-indent: -9999px
+
+    ul
+      @extend .clearfix
+      float: left
+      list-style: none
+      margin: 0
+      padding: 0
+      position: relative
+      top: 13px
+
+      li
+        font-size: .9em
+        float: left
+        margin-right: 15px

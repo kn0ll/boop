@@ -1,109 +1,77 @@
 define [
+  'handlebars',
+  'underscore',
   'core/context',
-  'teoria',
   'backbone.layout',
   'hbs!tmpl/components/create-boop',
   'core/session',
-  'resources/boop'
-], (context, teoria, Layout, template, session, Boop) ->
+  'resources/boop',
+  'audio/recorder',
+  'audio/keyboard',
+  'views/components/keyboard',
+  'core/router',
+  'wavencoder'
+], (Handlebars, _, context, Layout, template, session, Boop,
+  Recorder, Keyboard, KeyboardView, router, wavEncoder) ->
 
-  Key = class extends Backbone.Model
+  RecordButton = class extends Layout
+    tagName: 'button'
 
-    defaults:
-      on: false
-      key: 'C'
-      octave: 4
-
-    getName: ->
-      @get('key') + @get('octave')
-
-  Keys = class extends Backbone.Collection
-
-    model: Key
-
-  Keyboard = class extends Backbone.Model
-
-    defaults:
-      keys: ['C', 'D', 'G']
-      octaves: [3, 4]
-
-    initialize: ->
-      super
-      keys = []
-      for octave in @get 'octaves'
-        for key in @get 'keys'
-          keys.push
-            key: key
-            octave: octave
-      @keys = new Keys keys
-      @output = new PassThroughNode context, 1, 1
-      @keys.on 'change:on', _.bind(@keyChanged, @)
-
-    keyChanged: (key, key_on) ->
-      if key_on
-        note = teoria.note(key.getName())
-        osc = new Sine context, note.fq()
-        osc.connect @output
-        key.osc = osc
-      else if key.osc
-        key.osc.disconnect @output
-
-    connect: (dest) ->
-      @output.connect dest
-
-  KeyView = class extends Layout
-    tagName: 'li'
+    template: Handlebars.compile """
+      {{#if recording}}
+        stop recording
+      {{else}}
+        record
+      {{/if}}
+    """
 
     events:
-      mouseover: 'onMouseenter'
-      mouseout: 'onMouseleave'
+      'click': 'record'
 
-    onMouseenter: (e) ->
-      @model.set 'on', true
+    view: ->
+      recording: @model.recording
 
-    onMouseleave: (e) ->
-      @model.set 'on', false
-
-    render: ->
-      super
-      @$el.text @model.getName()
-      @
-
-  KeyboardView = class extends Layout
-    tagName: 'ul'
-    className: 'keyboard'
-
-    initialize: ->
-      super
-      @model = new Keyboard
-      @model.connect context.output
-
-    render: ->
-      super
-      do @$el.empty
-      @model.keys.each (key) =>
-        view = new KeyView
-          model: key
-        @$el.append view.render().el
-      @
-
-    remove: ->
-      super
-      @model.disconnect context.output
+    record: (e) ->
+      r = @model
+      if r.recording
+        r.stop()
+      else
+        r.record()
+      @render()
+      e.preventDefault()
 
   class extends Layout
     template: template
 
     views:
+      '.record': ->
+        new RecordButton
+          model: @recorder
       '.keyboard': ->
         new KeyboardView
+          model: @keyboard
 
     events:
       'submit': 'formSubmit'
 
+    initialize: ->
+      super
+      @model = new Boop
+        user_id: session.get('user_id')
+      @keyboard = new Keyboard
+      @recorder = new Recorder context, 1, 1
+      @keyboard.connect @recorder
+      @recorder.connect context.output
+
     formSubmit: (e) ->
-      boop = new Boop
-        user_id: session.id,
-        caption: @$('.caption').val()
-      boop.save()
+      attrs = 
+        title: @$('.title').val()
+        dataUri: wavEncoder.encode(@recorder.cache[0], {
+          numChannels: context.numberOfChannels,
+          sampleRateHz: context.sampleRate,
+          bytesPerSample: context.output.device.sink.quality
+        })
+      @model.save attrs,
+        success: ->
+          router.navigate session.get('user_id'), trigger: true
       e.preventDefault()

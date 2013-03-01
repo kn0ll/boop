@@ -12,8 +12,52 @@
     clear: both
 
 body
-  background: black
-  color: white
+  background: #fefefe
+  color: #333
+  font-family: Helvetica, arial, freesans, clean, sans-serif
+  width: 640px
+  margin: 40px auto
+
+a
+  color: rgb(189, 49, 44)
+  text-decoration: none
+
+  &:hover
+    text-decoration: underline
+
+form
+  padding: 20px
+  background: #efefef
+  margin-bottom: 20px
+
+  fieldset
+    border: 0
+    margin: 0
+    padding: 0
+
+    legend
+      font-weight: bold
+      margin-bottom: 5px
+
+    input[type="text"],
+    input[type="password"]
+      border: 1px solid #ccc
+      font-size: .8em
+      padding: 10px
+      margin-bottom: 5px
+
+    input[type="submit"],
+    button
+      border: 0
+      padding: 10px
+      color: #fff
+      text-shadow: 0 1px 0 #666
+      border-bottom: 2px solid rgb(189, 49, 44)
+      display: inline-block
+
+    button
+      color: rgb(189, 49, 44)
+      text-shadow: 0 1px 0 #ccc
 
 @import "layout/index"
 @import "components/create-boop"

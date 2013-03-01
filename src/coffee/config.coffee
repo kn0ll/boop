@@ -15,6 +15,7 @@ require.config
     'audiolet': 'lib/audiolet'
     'handlebars': 'lib/handlebars'
     'hbs': 'lib/require.handlebars'
+    'wavencoder': 'lib/wavencoder'
     'tmpl': '../hbs'
 
   shim:
@@ -45,6 +46,9 @@ require.config
 
     'teoria':
       exports: 'teoria'
+
+    'wavencoder':
+      exports: 'WavEncoder'
 
   hbs:
     disableI18n: true

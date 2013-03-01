@@ -57,9 +57,9 @@ module.exports = function(grunt) {
         })
       },
       img: {
-        files: grunt.file.expandMapping(['src/img/**/*.gif'], 'staging/img/', {
+        files: grunt.file.expandMapping(['src/img/**/*.png'], 'staging/img/', {
           rename: function(destBase, destPath) {
-            return destBase + destPath.replace(/\.gif$/, '.gif').replace(/src\/img\//, '');
+            return destBase + destPath.replace(/\.png$/, '.png').replace(/src\/img\//, '');
           }
         })
       }

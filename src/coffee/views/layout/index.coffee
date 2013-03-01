@@ -11,7 +11,7 @@ define [
     views:
       '.nav': ->
         new Nav
-          model: session
+          model: session.user
 
     setPage: (view) ->
       this.setView('.page', view)

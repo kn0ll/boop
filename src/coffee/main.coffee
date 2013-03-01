@@ -1,14 +1,19 @@
 require [
   'underscore',
   'core/layout',
-  'core/router'
-], (_, layout, router) ->
+  'core/router',
+  'core/session'
+], (_, layout, router, session) ->
 
   sync = Backbone.sync
   Backbone.sync = (method, model, options = {}) ->
-    url = _.result(model, 'url')
-    options.url = "http://localhost:8080#{url}"
+    protocol = location.protocol
+    host = location.hostname
+    port = 8080
+    path = _.result(model, 'url')
+    options.url = "#{protocol}//#{host}:#{port}#{path}"
     sync.apply null, [method, model, options]
 
+  session.fetchUser()
   layout.render()
   Backbone.history.start()

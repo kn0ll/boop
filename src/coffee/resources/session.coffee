@@ -16,6 +16,10 @@ define [
       else
         undefined
 
+    initialize: ->
+      super
+      @user = new User _id: this.get('user_id')
+
     save: (attrs, options = {}) ->
       user = new User
         _id: attrs.user_id
@@ -27,3 +31,6 @@ define [
           Backbone.Model::save.apply @, [attrs, options]
         error: (model) ->
           options.error? model, 'no user with that user_id and password'
+
+    fetchUser: ->
+      @user.fetch.apply(@user, arguments)
