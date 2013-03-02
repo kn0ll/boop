@@ -20,5 +20,5 @@ define [
 
     addItem: (log) ->
       $el = @$el
-      $el.prepend('<li>' + log.get('title') + '<br /><a href="' + log.get('dataUri') + '">wav</a></li>')
+      $el.prepend('<li><a href="' + log.get('dataUri') + '">' + log.get('title') + '</a></li>')
       @

@@ -19,6 +19,9 @@ define [
     initialize: ->
       super
       @user = new User _id: this.get('user_id')
+      @on 'change:user_id', (model, user_id) =>
+        @user.clear()
+        @user.id = user_id
 
     save: (attrs, options = {}) ->
       user = new User
@@ -32,5 +35,10 @@ define [
         error: (model) ->
           options.error? model, 'no user with that user_id and password'
 
+    destroy: ->
+      super
+      @user.clear()
+
     fetchUser: ->
-      @user.fetch.apply(@user, arguments)
+      if @user.id
+        @user.fetch.apply(@user, arguments)
